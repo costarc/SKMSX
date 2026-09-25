@@ -3,3 +3,6 @@ SKMSX_v2.0/tests/work/
 **/tests/work/
 __pycache__/
 *.pyc
+
+# Test harness stays local only
+**/tests/
