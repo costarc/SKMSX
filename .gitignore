@@ -6,3 +6,6 @@ __pycache__/
 
 # Test harness stays local only
 **/tests/
+
+# Assembler symbol dump (build artifact)
+*.sym
