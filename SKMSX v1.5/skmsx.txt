@@ -1,0 +1,8 @@
+SKMSX is a Side Kick like text editor. Simple (very simple) editor... But,
+is not merely a text editor. It's a TSR editor for MSX (Terminate and Stay
+Resident).
+SKMSX is very helpful to create bat files, dbase procedures, Z80 codes, etc.
+Also perform the function of a personnel diary, with fast access to the
+information, without to access the disk.
+
+

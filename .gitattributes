@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.com binary
+*.COM binary
+*.bin binary
+*.pma binary

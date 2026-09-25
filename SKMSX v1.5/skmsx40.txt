@@ -1,0 +1,356 @@
+           MANUAL DE INSTRU€OES
+----------------------------------------
+
+       SSSSS K  K M   M SSSSS S   S
+       S     K K  MM MM S      S S
+       SSSSS KK   M M M SSSSS   S
+           S K K  M   M     S  S S
+       SSSSS K  K M   M SSSSS S   S
+
+               Versao 1.5
+----------------------------------------
+
+Please, contact the author:
+
+    Redacted
+    Redacted
+    Redacted
+    Redacted
+
+Internet E-mail: Redacted@vnet.ibm.com
+                  Redacted@ii.puccamp.br
+
+----------------------------------------
+
+SideKick for MSX foi desenvolvido com o
+intuito de facilitar o processo de digi-
+ta‡ao de pequenos textos, rotinas e at‚
+programas que nao ultrapassem o limite
+de mem¢ria de 8200 bytes, imposto pelo
+tamanho da regiao de VRAM onde o SKMSX e
+o texto que estiver sendo editado fica
+armazenado enquanto nao estiverem sendo
+utilizados. Sua grande vantagem em rela-
+‡ao aos editores convencionais ‚ o fato
+de ficar residente juntamente com o ar-
+quivo que estiver sendo editado, nao sen
+do necess rio carregar arquivos do disco
+a todo instante.
+
+O SKMSX ocupa somente 4Kb de memoria, o
+que implica que seus recursos nao sao
+muitos, por‚m, para a finalidade a que
+se prop“e, a realiza bem.
+
+O valor do SKMSX ‚ o correspondente a
+R$ 18,00 REAIS (despesas incluidas).
+O pagamento pode ser feito por cheque
+nominal a Redacted ou
+dep¢sito banc rio para:
+
+Nome Redacted
+Banco Redacted
+Conta Redacted
+
+Neste caso, junto com a carta deve vir
+uma c¢pia do comprovante de dep¢sito
+banc rio (Numero do deposito).
+
+Caso deseje receber o SKMSX mais rapi-
+damente por SEDEX, deve ir a uma agen-
+cia dos correios, verificar o valor do
+SEDEX entre Sumare e a sua cidade, e
+acrescentar ao valor do programa.
+
+========================================
+
+O SKMSX trabalha da seguinte forma:
+ Execute-o (pode ser colocado na
+ autoexec.bat) A partir de agora,
+ sempre que voce quizer editar um
+ texto, e' so pressionar CTRL+SHIFT
+ para acessar o editor. Nada do que
+ voce estiver utilizando sera perdido.
+Para voltar ao DOS, pressione ESC.
+SKMSX nao e compativel com programas
+ graficos, pois utiliza toda a VRAM
+ para armazenar a si proprio e o
+ texto que estiver sendo editado. E'
+ por isso que sua limitacao esta em
+ torno de somente 8K de texto (8K do
+ texto mais 4K do proprio editor =
+ a um total de 12K de VRAM, que ficam
+ livres quando estamos usando o mode
+ texto de 40 colunas).
+Imagine este editor adaptado para um
+ MSX com 128k de VRAM... Mil recursos,
+ possibilidade de editar textos enormes
+ etc. Mas voltemos 'a realidade, que
+ so temos um MSX 1.
+
+Para que o SKMSX possa ser chaveado
+ entre RAM e VRAM, e' preciso que exista
+ um programa permanente em memoria res-
+ ponsavel por esta tarefa. Este pequeno
+ programa TSR (residente), e' instalado
+ quando voce executa o SKMSX. Ele pode
+ ficar ocupando a fila musical do PLAY
+ ou alocado em HIGH MEMORY (!!)
+
+E O MSX TEM ISSO??? Lembram-se de um dos
+ ultimos artigos da revista CPU? La tem
+ um programa em Assembly para alocar
+ memoria alta, para programas residen-
+ tes, de forma que o DOS nao os altere,
+ o que ocasionaria em CRASH.
+Pois bem, o SKMSX pode reconhecer esta
+ regiao de memoria e alocar-se, desde
+ que o espaco seja suficiente. De umas
+ folheadas na velha revista, que vale
+ 'a pena.
+Agora, caso nao precise utilizar o
+ comando PLAY enquanto estiver com o
+ SKMSX na memoria, nao se preocupe com
+ mais nada. (Mas se voce programa em LM,
+ nao va jogar sua rotinas na fila do
+ PLAY tambem, ok??   ... CRASH!!)
+
+Caso queira desistalar o SKMSX por
+ algum motivo, e' so chama-lo com
+ o parametro /U (de Uninstall).
+
+=======================================
+
+How to Install and Use:
+Como instalar e usar:
+
+SKMSX.COM    - Install SKMSX on memory
+SKMSX.COM /U - Remove SKMSX from memory
+CRTL+SHIFT   - Launch the SKMSX
+ESC          - Exit from SKMSX to
+                previous program (or to MSXDOS)
+
+
+     ============================
+
+Key functions:
+-----------------
+
+
+F01 - Read o file from disk
+       (ex: A:MYTEXT.TXT)
+      Le um arquivo do disco
+       (ex: A:MEUTEXTO.TXT)
+
+F02 - Save current file to disk (with
+       current name and destination
+       drive)
+      Grava o arquivo no disco (com o
+       nome atual)
+
+F03 - Save current file to disk with
+       another name (SKMSX ask for new
+       name)
+      Grava o arquivo no disco com outro
+       nome (SKMSX pergunta o novo nome)
+
+F04 - Find a string on text
+      Procura uma string no texto
+
+F05 - Find and change a string on text
+      Busca e troca uma string no texto
+
+F06 - Mark the begin of a block
+      Marca o in¡cio de bloco
+
+F07 - Mark the end of a block
+      Marca o fim de bloco
+
+F08 - Copy the marked block to actual
+       position
+      Copia o bloco marcado para a
+       posi‡ao do cursor
+
+F09 - Repeat the last find
+      Repetir a £ltima procura de string
+
+F10 - Repeat the last find/change
+      Repete a £ltima busca/troca
+
+HOME       - Vai para o in¡cio do texto
+             Go to home (superior left
+              corner)
+
+INSERT     - Liga/desliga sobreposicao
+              de caracteres
+             ON/OFF characters overwrite
+
+DELETE     - Apagar o caracter corrente
+             Erase current character
+
+SETAS      - Move o cursor nos quatro
+              sentidos
+             Move cursor up, down, left,
+              rigth
+
+ESC        - Sai do SKMSX voltando …
+              aplica‡ao anterior
+             Exit from SKMSX to the
+              previous program
+
+Comandos de duas teclas:
+Two keys commands:
+------------------------
+
+SHIFT+S.DIR - Vai para o inicio da
+               palavra seguinte
+              Go to begin of next word
+
+SHIFT+S.ESQ - Vai para o in¡cio da
+               palavra anterior
+              Go to begin of previous
+               word
+
+SHIFT+S.CIM - Rolar a tela de texto uma
+               linha para baixo
+              Scroll down
+
+SHIFT+S.BAI - Rola a tela de texto uma
+               linha para cima
+              Scroll up
+
+SHIFT+BS    - Apaga at‚ o in¡cio da
+               palavra atual
+              Erase to the begin of
+               current word
+
+SHIFT+DELETE- Apaga at‚ o fim da palavra
+               atual
+              Erase to the end of
+               current word
+
+SHIFT+HOME  - Vai para o fim do texto
+              Go to end of file
+
+CTRL+S.DIR  - Vai para o fim da linha
+              Go to end of line
+
+CTRL+S.ESQ  - Vai para o in¡cio da
+               linha atual
+              Go to begin of current
+               line
+
+CTRL+S.CIM  - Rola a tela 18 linhas para
+               baixo
+              Scroll down 18 lines (fast
+               scroll down)
+
+CTRL+S.BAI  - Rola a tela 18 linhas para
+               cima
+              Scroll up 18 lines (fast
+               scroll up)
+
+CTRL+DELETE - Apaga at‚ o fim da linha
+              Erase to the end of line
+
+CTRL+BS     - Apaga at‚ o in¡cio da
+               linha
+              Erase to the begin of line
+
+
+----------------------------------------
+
+       OUTRAS INFORMA€OES AO USUARIO
+       =============================
+
+Como iniciar um novo arquivo:
+-----------------------------
+
+Use a tecla HOME (vai para o in¡cio do
+  arquivo).Use F1 e digite o nome dese-
+  jado para o novo arquivo.SKMSX tenta
+  encontrar no disco. Caso exista, entao
+  carrega, caso contrario, passa ao modo
+  de edicao, mas o nome do arquivo que
+  voce digitou passa a ser o default
+  (sera usado na hora que voce grava-lo
+  no disco, com a opcao F2). Este e' o
+  metodo usado para voce criar novos
+  arquivos sem precisar desinstalar o
+  SKMSX.
+
+Como concatenar um arquivo:
+---------------------------
+
+Com o SKMSX s¢ ‚ poss¡vel concatenar um
+  arquivo do disco ao final de um texto
+  ja existente na mem¢ria.V  para o fim
+  do texto e use F1 para ler o arquivo
+  desejado.Lembre-se do limite de mem¢-
+  ria para o arquivo de trabalho.
+
+O indicador BLOCK:
+------------------
+
+Quando as fun‡oes de marca‡ao de bloco
+  sao utilizadas, BLOCK indica que h 
+  um bloco marcado. Quando posicionamos
+  o cursor numa posi‡ao anterior ao
+  bloco marcado, a indica‡ao BLOCK ‚
+  substitu¡da por -----, o que indica
+  que pode haver a perda do bloco marca-
+  do se houver a inser‡ao de caracteres.
+  Infelizmente um melhor tratamento
+  destas fun‡oes limitaria muito o tama-
+  nho do arquivo de trabalho. Assim,
+  ao utiliza-las, lembre de que o motivo
+  de nao ser tao amigavel nao se deve a
+  uma limitacao do programa, mas do pro-
+  prio MSX.
+
+=========================================
+
+Se voce teve acesso ao SKMSX de outra
+ forma que nao diretamente pelo autor do
+ mesmo, entao provavelmene voce tem uma
+ copia pirata deste programa.
+Sera que vale 'a pena? Pense bem...
+ Se voce esta utilizando este programa, e'
+ porque realmente precisa do MSX AINDA!!!
+ Entao, por que nao incentivar a sua
+ sustentacao, pagando a quem produz soft-
+ware para ele? Se voce piratear este
+ programa, nao receberei pagamento pelo
+meu trabalho, e sem pagamento, nao ha
+ trabalhador que aguente as pontas,
+ concorda? Mesmo quando sao remunerados,
+ ainda fazem greve, por ganharem pouco.
+ Imagine se nao receberem nada...
+Por que acha que com programadores seria
+ diferente? Se voce pretente utilizar este
+ programa, entao o mais correto que pode
+ fazer e' paga-lo.
+ Incentivo-o ainda, a registrar todos os
+ programas nacionais para MSX que voce
+ utilizar, de forma que eu e os  demais
+ programadores possamos  continuar produ-
+ zindo mais software, e assim, nosso MSX
+ estara sempre na MODA.
+Faca um exercicio de bom senso, valorize
+ seu investimento, ao inves de sucatea-
+ lo. Enfie a mao no bolso, faca um cheque
+ e registre sua copia do SKMSX. Voce
+ so' tem a ganhar.
+
+=======================================
+
+Another's countries:
+
+Please, contact the  author. If the
+SKMSX is useful for you, then  we can
+check a way you do a donation. After
+all, I'm sure that there is in your
+country good shareware programs I want
+:) . We can do a exchange...
+
+Please, e-mail Redacted@vnet.ibm.com.
