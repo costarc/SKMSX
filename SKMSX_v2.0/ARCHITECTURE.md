@@ -1,4 +1,4 @@
-# SKMSX 3: implementation contract
+# SKMSX 2: implementation contract
 
 This is a new implementation. The supplied New_v2.0_Redesigned/skmsxv2.0.asm
 is a reference for the gap-buffer idea, not a source of relocation tables or

@@ -453,14 +453,14 @@ label_save: db "Save as: ",0
 msg_load_position: db "Use HOME/EOF",0
 msg_name: db "Bad 8.3 name",0
 msg_io: db "Disk error",0
-msg_temp: db "SK3 temp used",0
-msg_recovery: db "Keep SK3BAK!",0
+msg_temp: db "SK2 temp used",0
+msg_recovery: db "Keep SK2BAK!",0
 msg_loaded: db "Loaded",0
 msg_saved: db "Saved",0
 msg_new: db "New file",0
 invalid_chars: db '"*+,/:;<=>?[\]|',0
-temp_name: db "SK3SAVE $$$"
-backup_name: db "SK3BAK  $$$"
+temp_name: db "SK2SAVE $$$"
+backup_name: db "SK2BAK  $$$"
 pending_name: ds 15
 target_fcb: ds 37
 io_size: ds 3
