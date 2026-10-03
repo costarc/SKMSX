@@ -37,27 +37,57 @@ interrupt/VDP code. Original v1.5 behavior is specified by Original/skmsx80.txt.
 
 ## Storage selection
 
-1. Query mapper allocation services, enumerate mapper slots, choose the one with
-   the most allocatable space, and reserve system segments for resident storage.
-   Ownership is explicit; uninstall releases exactly those segments.
-2. If mapper memory cannot be safely reserved, detect usable VRAM and select the
-   VRAM backend. MSX1 must work with 16 KB; MSX2 must distinguish 64 and 128 KB.
+The text goes to the larger of the best memory mapper and video memory.
 
-Resident layout. With mapper storage (DOS2, or DOS1 with mapper support
-routines such as MSR) the editor is banked: page 3 keeps only the core (hook,
+1. Mapper candidates, in order:
+   - DOS2 or mapper support routines (MSR) reachable through the extended BIOS:
+     enumerate their mapper slots, choose the one with the most allocatable
+     space and reserve system segments. Ownership is explicit; uninstall
+     releases exactly those segments.
+   - Plain MSX-DOS 1 (direct mapper): every slot is switched into page 2 and
+     probed, with all bytes restored: the first byte of each of the 256 segment
+     numbers is saved, each segment gets its own number written, and the
+     read-back pattern gives the size (a power of two of at least 4; plain RAM
+     and ROM fail the pattern). Ports FCh-FFh are shared by all mappers. In the
+     TPA's own slot, segments 0-3 belong to DOS; every other slot is all free.
+     The map_* entries become IN/OUT stubs on ports FEh/FDh; page-2/page-1
+     segments that cannot be read back (FFh) are assumed to be 1 and 2.
+2. Video memory is always probed (MSX1: 2020h-3FFFh; MSX2: 64 or 128 KB).
+   MSX1 must work with 16 KB; MSX2 must distinguish 64 and 128 KB.
+
+The capacities are compared before the reserve is taken. A mapper needs at
+least two free segments (three for a resident install: one holds the bank).
+
+Resident layout. Only a small page-3 part is always present: the core (hook,
 private stack, context save/restore, storage access, DOS entry, FCB and DTA
-buffers) plus the extras (DOS2 calls, mapper paging, DOS2 context, segment
-table), about 1.4 KB + one byte per segment. The editor itself (session,
-buffer, navigation, commands, view, files, platform) lives in one reserved
-mapper segment, mapped at 4000h for each activation and handed back on exit.
-Without a mapper everything stays in page 3 as one block (the extras only with
-DOS2). The installer relocates the three regions with separate deltas, chosen
-by the region each relocated word points into. DOS never sees page-1 buffers:
-DOS1's DiskROM occupies page 1 while it works. Slots are switched with ENASLT
-at 0024h directly; CALSLT restores the whole primary slot register on return.
+buffers) plus the extras (DOS2 calls, mapper paging, bank switching, DOS2
+context, segment table), about 1.7 KB + one byte per segment. The editor
+itself (session, buffer, navigation, commands, view, files, platform) is the
+bank, relocated to run at 4000h, and it is kept in one of:
+
+- `bank_active = 1`, a reserved mapper segment mapped into page 1 for each
+  activation (the mapper is the chosen storage);
+- `bank_active = 2`, a video memory image (MSX2 with video memory storage).
+  Each activation switches page 1 to the RAM slot of page 3 (the TPA), saves the
+  program RAM under the window to video memory, copies the image over it and
+  runs; on exit it writes the image back (the bank holds the document pointers
+  and view state), restores the program RAM and gives page 1 back. Two areas
+  are reserved after the DOS context: the bank image and the saved RAM;
+- `bank_active = 0`, none: core, bank (and extras with DOS2) stay in page 3 as
+  one block. Only on an MSX1 without a mapper.
+
+The installer relocates the three regions with separate deltas, chosen by the
+region each relocated word points into. DOS never sees page-1 buffers: DOS1's
+DiskROM occupies page 1 while it works. Slots are switched with ENASLT at
+0024h directly; CALSLT restores the whole primary slot register on return.
+
+Video memory is accessed with the TMS9918's limits in mind: after every
+address setup a short delay (the BIOS's `ex (sp),hl` pair) precedes the data
+access, and block loops spend at least 37 T-states per byte. Without this the
+MSX1 chip drops or misplaces writes (seen as a corrupted context restore).
 
 Mapper storage is capped at MAX_SEGMENTS (64 = 1 MB): every segment costs a
-resident byte and DOS2 needs the whole resident image to fit with its BDOS
+resident byte and DOS needs the whole resident image to fit with its BDOS
 entry above C000h. Uninstall calls the mapper release on the resident page-3
 stack, because DOS2 mapper routines swap page 2.
 
