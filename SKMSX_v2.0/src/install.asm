@@ -1,21 +1,29 @@
 ; Installer is transient. SjASMPlus generates the complete relocation table.
-; /T runs the same editor in the foreground for deterministic regression tests.
+; Without switches the editor runs once in the foreground; /R installs it
+; resident (Ctrl+Shift), /U removes the resident copy.
 installer:
     ld hl,0081h
     ld a,(0080h)
     ld b,a
 .argument:
-    ld a,b
-    or a
-    jr z,.install
-    ld a,(hl)
-    inc hl
-    and 0DFh
-    cp 'T'
-    jp z,program_entry
+    call argument_switch
+    jr c,.dispatch
+    cp 'F'
+    call z,argument_file
+    cp 'R'
+    jr nz,.not_resident
+    ld (argument_mode),a
+.not_resident:
+    cp 'U'
+    jr nz,.argument
+    ld (argument_mode),a
+    jr .argument
+.dispatch:
+    ld a,(argument_mode)
     cp 'U'
     jp z,uninstall
-    djnz .argument
+    cp 'R'
+    jp nz,program_entry
 .install:
     call locate_resident
     jp z,already_installed
@@ -203,6 +211,73 @@ copy_bank:
     ld h,080h
     jp bios_enaslt
 
+; Advance HL/B (command tail) to the next "/x" switch; A = x in upper case.
+; Carry when the tail is exhausted.
+argument_switch:
+    ld a,b
+    or a
+    scf
+    ret z
+    ld a,(hl)
+    inc hl
+    dec b
+    cp '/'
+    jr nz,argument_switch
+    ld a,b
+    or a
+    scf
+    ret z
+    ld a,(hl)
+    inc hl
+    dec b
+    and 0DFh
+    ret
+
+; /F name: stage the filename in the editor image, loaded on first activation.
+argument_file:
+.spaces:
+    ld a,b
+    or a
+    jr z,.end
+    ld a,(hl)
+    cp ' '
+    jr z,.skip
+    cp 9
+    jr nz,.name
+.skip:
+    inc hl
+    dec b
+    jr .spaces
+.name:
+    ld de,pending_name
+    ld c,14
+.copy:
+    ld a,b
+    or a
+    jr z,.end
+    ld a,(hl)
+    cp ' '+1
+    jr c,.end
+    cp '/'
+    jr z,.end
+    ld (de),a
+    inc de
+    inc hl
+    dec b
+    dec c
+    jr nz,.copy
+.end:
+    xor a
+    ld (de),a
+    ld a,(pending_name)
+    or a
+    ld (autoload_pending),a
+    ret z
+    ld a,1
+    ld (autoload_pending),a
+    xor a
+    ret
+
 locate_resident:
     ld a,(0FDCCh)
     cp 0C3h
@@ -351,6 +426,7 @@ install_error:
     jp 0005h
 
 final_base: dw 0
+argument_mode: db 0
 uninstall_sp: dw 0
 delta_core: dw 0
 install_p2_segment: db 0

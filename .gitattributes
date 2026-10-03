@@ -3,3 +3,4 @@
 *.COM binary
 *.bin binary
 *.pma binary
+*.bat text eol=crlf

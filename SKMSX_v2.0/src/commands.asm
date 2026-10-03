@@ -1,6 +1,7 @@
 editor_main:
     xor a
     ld (exit_requested),a
+    call file_autoload
 .loop:
     call view_redraw
     call keyboard_read
