@@ -12,6 +12,7 @@ file_load:
     ld de,label_load
     call file_prompt
     ret c
+file_load_named:
     ld de,file_fcb
     ld c,00Fh
     call dos_call
@@ -116,6 +117,17 @@ file_load:
 .read_error:
     call file_close
     jp file_error
+
+; /F at install time: load the named file on the first editor activation.
+file_autoload:
+    ld a,(autoload_pending)
+    or a
+    ret z
+    xor a
+    ld (autoload_pending),a
+    call parse_filename
+    ret c
+    jp file_load_named
 
 file_save:
     ld a,(file_named)
@@ -462,6 +474,7 @@ invalid_chars: db '"*+,/:;<=>?[\]|',0
 temp_name: db "SK2SAVE $$$"
 backup_name: db "SK2BAK  $$$"
 pending_name: ds 15
+autoload_pending: db 0
 target_fcb: ds 37
 io_size: ds 3
 io_remaining: ds 3

@@ -153,7 +153,7 @@ bank_saved_segment: db 0
 bank_saved_slot: db 0
 
 ; ENASLT (A=slot, H=page). Page 0 holds ENASLT both inside the BIOS hook and
-; under DOS (installer, /T). Not through CALSLT: its return restores the whole
+; under DOS (installer, foreground). Not through CALSLT: its return restores the whole
 ; primary slot register and would undo the switch of another page.
 bios_enaslt:
     push bc
