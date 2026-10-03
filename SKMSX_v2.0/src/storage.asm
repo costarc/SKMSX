@@ -1,6 +1,8 @@
 ; Banked storage. Public byte API preserves BC/DE/HL, clobbers AF only.
 ; Calls occur with interrupts disabled. Platform restores VDP page zero before EI.
 ; Installer supplies mapper jump entries, selected slot, segment table and base.
+; The map_* entries are either jumps to MSX-DOS 2 / mapper-support routines or,
+; for direct hardware access, three-byte IN/OUT stubs on the mapper ports.
 storage_read:
     push bc
     push de
@@ -88,6 +90,8 @@ vram_address:
     and 03Fh
     or b
     out (099h),a
+    ex (sp),hl              ; TMS9918: let the address settle before the data access
+    ex (sp),hl
     ret
 
 ; Patched to operating-system mapper routines before relocation.
@@ -105,5 +109,9 @@ mapper_slot: db 0
 segment_count: db 0
 restore_segment: db 0
 restore_slot: db 0
-bank_active: db 0               ; editor bank mapped at 4000h on activation
+bank_active: db 0               ; 0 none, 1 bank in a mapper segment, 2 in video memory
 code_segment: db 0
+mapper_direct: db 0             ; 1: mapper driven through ports FCh-FFh, no OS routines
+bank_area: dw 0                 ; bytes copied per bank load/save (video memory bank)
+bank_vram_off: dw 0             ; reserve offsets of the bank image and of the
+bank_save_off: dw 0             ; saved program RAM (video memory bank)

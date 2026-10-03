@@ -3,10 +3,14 @@
 ; resident page-3 byte, which DOS must also fit above C000h.
 MAX_SEGMENTS equ 64
 ; Resident layouts (install.asm relocates each region with its own delta):
-;   banked (mapper):  page 3 = core + extras + segment table,
-;                     editor bank in its own mapper segment at 4000h
-;   monolithic (VRAM): page 3 = core + bank (+ extras with DOS2), as assembled
+;   banked:     page 3 = core + extras + segment table; the editor bank runs at
+;               4000h and is kept in a mapper segment (bank_active 1) or in
+;               video memory (bank_active 2, copied in for each activation)
+;   monolithic: page 3 = core + bank (+ extras with DOS2), as assembled;
+;               only on machines without a mapper or MSX2 video memory
 BANKED_PAGE3 equ (core_end-resident_start)+(extras_end-extras_start)
+; Bytes copied for each load/save of a video memory bank (whole 256-byte units).
+BANK_AREA equ ((bank_end-bank_start)+255)/256*256
     org 0100h
     jp installer
     relocate_start

@@ -107,11 +107,14 @@ installer:
     ld a,(bank_active)
     or a
     jr z,.deltas
+    cp 1
+    jr nz,.bank_deltas         ; video memory bank: no mapper state to keep
     ; Page-2 state for copy_bank, read while the extras still run unrelocated.
-    call map_get_p2
+    call mapper_p2_now
     ld (install_p2_segment),a
     call get_page2_slot
     ld (install_p2_slot),a
+.bank_deltas:
     ld hl,04000h-bank_start
     ld (delta_bank),hl
     ld hl,(final_base)
@@ -169,7 +172,14 @@ installer:
     ldir
     jr .staged
 .stage_banked:
+    ld a,(bank_active)
+    cp 2
+    jr z,.stage_video
     call copy_bank
+    jr .stage_core
+.stage_video:
+    call copy_bank_vram
+.stage_core:
     ld hl,resident_start
     ld de,08000h
     ld bc,core_end-resident_start
@@ -235,6 +245,7 @@ argument_switch:
 
 ; /F name: stage the filename in the editor image, loaded on first activation.
 argument_file:
+    ld de,pending_name          ; set before any exit: .end always stores through DE
 .spaces:
     ld a,b
     or a
@@ -249,7 +260,6 @@ argument_file:
     dec b
     jr .spaces
 .name:
-    ld de,pending_name
     ld c,14
 .copy:
     ld a,b
@@ -277,6 +287,90 @@ argument_file:
     ld (autoload_pending),a
     xor a
     ret
+
+; Write the relocated editor bank into its video memory image (bank_active 2).
+; Runs after relocation, so it uses only plain code and variables of the
+; image, never a routine of it. MSX2 video memory addressing (R#14).
+copy_bank_vram:
+    ld hl,(screen_store)
+    ld de,(bank_vram_off)
+    add hl,de
+    ld (cb_off),hl
+    ld a,(screen_store+2)
+    adc a,0
+    ld (cb_off+2),a
+    ld hl,bank_end-bank_start
+    ld (cb_left),hl
+    ld hl,bank_start
+.chunk:
+    ld de,(cb_left)
+    ld a,d
+    or e
+    ret z
+    ld c,e                     ; chunk size; 0 = a full 256 bytes
+    ld a,d
+    or a
+    jr z,.size
+    ld c,0
+.size:
+    push hl
+    ld hl,(cb_off)
+    ld de,(storage_base)
+    add hl,de
+    ld a,(cb_off+2)
+    adc a,0
+    ld d,a
+    ld a,h
+    rlca
+    rlca
+    and 3
+    ld e,a
+    ld a,d
+    add a,a
+    add a,a
+    or e
+    out (099h),a
+    ld a,08Eh
+    out (099h),a
+    ld a,l
+    out (099h),a
+    ld a,h
+    and 03Fh
+    or 040h
+    out (099h),a
+    ex (sp),hl              ; let the address settle before the data access
+    ex (sp),hl
+    pop hl
+    ld b,c
+.out:
+    ld a,(hl)
+    out (098h),a
+    inc hl
+    djnz .out
+    push hl
+    ld a,c
+    ld e,a
+    ld d,0
+    or a
+    jr nz,.advance
+    inc d
+.advance:
+    ld hl,(cb_off)
+    add hl,de
+    ld (cb_off),hl
+    jr nc,.left
+    ld a,(cb_off+2)
+    inc a
+    ld (cb_off+2),a
+.left:
+    ld hl,(cb_left)
+    or a
+    sbc hl,de
+    ld (cb_left),hl
+    pop hl
+    jr .chunk
+cb_off: ds 3
+cb_left: dw 0
 
 locate_resident:
     ld a,(0FDCCh)

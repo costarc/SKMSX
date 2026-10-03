@@ -41,6 +41,8 @@ video_read_address:
     ld a,h
     and 03Fh
     out (099h),a
+    ex (sp),hl              ; TMS9918: let the address settle before the data access
+    ex (sp),hl
     ret
 
 
@@ -60,6 +62,8 @@ video_write_address:
     and 03Fh
     or 040h
     out (099h),a
+    ex (sp),hl              ; TMS9918: let the address settle before the data access
+    ex (sp),hl
     ret
 
 
