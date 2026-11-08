@@ -6,6 +6,19 @@ SKMSX is a small, SideKick-style text editor for MSX computers running MSX-DOS. 
 
 The original SKMSX 1.5 was written by Ronivon Candido Costa for the MSX1 in 1993. SKMSX 2 is a new implementation with the same keys, for MSX-DOS 1 and MSX-DOS 2, MSX1 and MSX2 or later.
 
+## 📖 The Book
+
+This project is **Chapter 8, "SKMSX"**, in a book:
+
+**Chips, Code, and Cartridges: Turn Curiosity into Creation with 13 Hands-On Projects, from 8-bit Classics to FPGAs**
+
+It walks through thirteen of my own hardware and software projects, from 8-bit classics to FPGAs, for beginners and curious makers. Each chapter explains how one project works and how to build it, with colour diagrams and real code from its repository.
+
+### 👉 [Get the book on Amazon](https://link.amazon/B013Yaq9y)
+
+<sub>As an Amazon Associate, the author earns from qualifying purchases. Buying through this link
+supports these projects at no extra cost to you.</sub>
+
 ## What's in this repository
 
 | Folder | Contents |
